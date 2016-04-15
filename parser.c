@@ -119,11 +119,12 @@ void parse_file ( char * filename,
       //printf( "%lf %lf %lf\n", x, y, z);
     }    
     else if ( strncmp(line, "bezier", strlen(line)) == 0 ) {
-      //printf("BEZIER\n");
       fgets(line, 255, f);
       sscanf(line, "%lf %lf %lf %lf %lf %lf %lf %lf",
 	     &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
       add_curve(pm, x1, y1, x2, y2, x3, y3, x4, y4, 0.01, BEZIER_MODE );
+      //matrix_mult( STACK->data[ STACK->top ], pm);
+      //pm->lastcol = 0;
       //printf( "%lf %lf %lf\n", x, y, z);
     }    
     else if ( strncmp(line, "hermite", strlen(line)) == 0 ) {
@@ -134,26 +135,33 @@ void parse_file ( char * filename,
       add_curve(pm, x1, y1, x2, y2, x3, y3, x4, y4, 0.01, HERMITE_MODE );
       //printf( "%lf %lf %lf\n", x, y, z);
     }
+    
     else if ( strncmp(line, "box", strlen(line)) == 0 ) {
       fgets(line, 255, f);
       sscanf(line, "%lf %lf %lf %lf %lf %lf", &x, &y, &z, &x1, &y1, &z1);
       add_box(pm, x, y, z, x1, y1, z1);
-      // printf( "%lf %lf %lf %lf %lf %lf\n", x, y, z, x1, y1, z1);
+      matrix_mult( STACK->data[ STACK->top ], pm);
+      draw_polygons( pm, s, g );
+      pm->lastcol = 0;
     }
+    
     else if (strncmp(line, "sphere", strlen(line)) == 0 ) {
       fgets(line, 255, f);
       sscanf(line, "%lf %lf %lf", &x, &y, &z);
       add_sphere(pm, x, y, z, 10);
-      //printf( "%lf %lf %lf\n", x, y, z);
+      matrix_mult( STACK->data[ STACK->top ], pm);
+      draw_polygons( pm, s, g );
+      pm->lastcol = 0;
     }
     else if (strncmp(line, "torus", strlen(line)) == 0 ) {
       fgets(line, 255, f);
       sscanf(line, "%lf %lf %lf %lf", &x, &y, &z, &z1);
       add_torus(pm, x, y, z, z1, 10);
-      //printf( "%lf %lf %lf\n", x, y, z);
+      matrix_mult( STACK->data[ STACK->top ], pm);
+      draw_polygons( pm, s, g );
+      pm->lastcol = 0;
     }
     else if ( strncmp(line, "scale", strlen(line)) == 0 ) {
-      //printf("SCALE\n");
       fgets(line, 255, f);
       //line[strlen(line)-1]='\0';      
       sscanf(line, "%lf %lf %lf", &x, &y, &z);
@@ -209,15 +217,15 @@ void parse_file ( char * filename,
       matrix_mult(transform, pm);
     }
     else if ( strncmp(line, "display", strlen(line)) == 0 ) {
-      clear_screen(s);
-      draw_polygons(pm, s, g);
+      //clear_screen(s);
+      //draw_polygons(pm, s, g);
       display(s);
     }
     else if ( strncmp(line, "save", strlen(line)) == 0 ) {
       fgets(line, 255, f);
       // line[strlen(line)-1] = '\0';
-      clear_screen(s);
-      draw_polygons(pm, s, g);
+      //clear_screen(s);
+      //draw_polygons(pm, s, g);
       save_extension(s, line);
     }
     else if ( strncmp(line, "clear", strlen(line)) == 0 ) {
@@ -227,7 +235,7 @@ void parse_file ( char * filename,
       return;
     }
     else if ( strncmp(line, "push", strlen(line)) == 0 ) {
-      push( STACK );
+      push( STACK ); //seg fault
       printf("Pushed\n");
     }
     else if ( strncmp(line, "pop", strlen(line)) == 0 ) {
@@ -253,9 +261,16 @@ void parse_file ( char * filename,
 
 
 Activity Log:
+4/14
 Added "pop" and "push"
 Applied that transform/rotate/scale to everything
     multi != mult....
     stack->data != stack
+4/15
+Changed the save and display
+added in the extra for box/sphere/torus
+      matrix_mult( STACK->data[ STACK->top ], pm);
+      draw_polygons( pm, s, g );
+      pm->lastcol = 0;
 
 */
