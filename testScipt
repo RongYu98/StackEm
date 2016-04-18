@@ -1,0 +1,18 @@
+#push first
+#translate next
+#start without rotate first
+push
+translate
+250 250 0
+#yrotate
+#45
+#xrotate
+#45
+sphere
+25 25 50
+push
+box
+10 10 50 60 20 20
+display
+#move, rotate, draw
+#T . R . PM
