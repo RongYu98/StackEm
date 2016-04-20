@@ -1,0 +1,41 @@
+spush
+translate
+220 175 0
+zrotate
+20
+yrotate
+45
+xrotate
+20
+# finished tank body
+box
+-190 75 100 380 150 200
+push
+# upper box
+translate
+0 115  0
+box
+-100 35 50  200 70 100
+push
+# gun
+translate
+100 0 0
+zrotate
+15
+box
+0 15 10 175 20 20
+push
+# torus
+translate
+175 15 0
+#xrotate
+#90
+#yrotate
+#90
+#torus
+#0 -10 5 10
+sphere
+0 -10 10
+save
+tank.png
+quit
